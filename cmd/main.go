@@ -10,7 +10,12 @@ import (
 )
 
 func main() {
-	// Генерация пары ключей RSA
+	pwd, err := os.Getwd()
+	if err != nil {
+		fmt.Println("Error while getting pwd", err)
+		return
+	}
+
 	privateKey, err := rsa.GenerateKey(rand.Reader, 4096)
 	if err != nil {
 		fmt.Println(err)
@@ -23,7 +28,7 @@ func main() {
 		Bytes: x509.MarshalPKCS1PrivateKey(privateKey),
 	}
 
-	privateFile, err := os.Create("private_key.pem")
+	privateFile, err := os.Create(fmt.Sprintf(pwd + "/private_key.pem"))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -39,7 +44,7 @@ func main() {
 		Bytes: publicKeyBytes,
 	}
 
-	publicFile, err := os.Create("public_key.pem")
+	publicFile, err := os.Create(fmt.Sprintf(pwd + "/public_key.pem"))
 	if err != nil {
 		fmt.Println(err)
 		return
